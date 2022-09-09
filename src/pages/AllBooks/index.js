@@ -6,7 +6,7 @@ import { timeSince } from "../../hooks/UseDateToTimeAgo";
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState("");
-  const { user, setIsUserRoleLoading, userRoles } = UseAuth();
+  const { user, getToken, userRoles } = UseAuth();
 
   useEffect(() => {
     fetch(`https://books-library-server.vercel.app/books`, {
@@ -34,7 +34,7 @@ const AllBooks = () => {
       .then((data) => {
         if (data.modifiedCount) {
           alert("Congrats you are promoted to a Creator");
-          setIsUserRoleLoading(true);
+          getToken(user.email);
         }
       })
       .catch((error) => {

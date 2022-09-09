@@ -27,7 +27,7 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route index element={<AllBooks />} />
+              {/* <Route index element={<AllBooks />} /> */}
               <Route
                 path="create-book"
                 element={

@@ -9,7 +9,7 @@ const useToken = (user) => {
       user_name: name,
     };
     if (email) {
-      fetch(`http://localhost:5000/user?email=${user.email}`)
+      fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           const accessToken = data.token;

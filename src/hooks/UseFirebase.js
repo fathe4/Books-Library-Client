@@ -47,31 +47,28 @@ const UseFirebase = () => {
       })
       .finally(() => {
         setIsLoading(false);
-        setIsUserRoleLoading(true);
       });
   };
 
   // SET TOKEN
-  useLayoutEffect(() => {
-    async function fetchData() {
-      if ((isUserRoleLoading && user.email) || user.email) {
-        await fetch(`http://localhost:5000/user?email=${user.email}`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.token) {
-              const accessToken = data.token;
-              localStorage.setItem("accessToken", accessToken);
-              setToken(accessToken);
-              setUserRoles(data.result.role);
-            } else {
-              setError(data.error);
-            }
-          })
-          .finally(() => setIsUserRoleLoading(false));
-      }
+  const getToken = async (email) => {
+    console.log("getToken");
+    if (user.email !== "") {
+      await fetch(`https://books-library-server.vercel.app/user?email=${email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.token) {
+            const accessToken = data.token;
+            localStorage.setItem("accessToken", accessToken);
+            setToken(accessToken);
+            setUserRoles(data.result.role);
+          } else {
+            setError(data.error);
+          }
+        })
+        .finally(() => setIsUserRoleLoading(false));
     }
-    fetchData();
-  }, [user.email, isUserRoleLoading, token]);
+  };
 
   // SIGN IN WITH USER AND EMAIL
   const signIn = (email, password, location, navigate) => {
@@ -79,6 +76,7 @@ const UseFirebase = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const destination = location?.state?.from || "/";
+        getToken(email);
         navigate(destination);
         setError("");
       })
@@ -133,7 +131,8 @@ const UseFirebase = () => {
   // ADD USER TO DATABASE
   const addUserToDB = async (email, name, method) => {
     const user = { name, email, role: ["VIEW_ALL"] };
-    await fetch("http://localhost:5000/addUser", {
+    console.log("https://books-library-server.vercel.app/addUser");
+    await fetch("https://books-library-server.vercel.app/addUser", {
       method: method,
       headers: {
         "content-type": "application/json",
@@ -142,13 +141,9 @@ const UseFirebase = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        fetch(`http://localhost:5000/user?email=${email}`)
-          .then((res) => res.json())
-          .then((data) => {
-            const accessToken = data.token;
-            localStorage.setItem("accessToken", accessToken);
-            setToken(accessToken);
-          });
+        console.log(data);
+        setIsUserRoleLoading(true);
+        getToken(email);
       })
       .finally(() => setIsUserRoleLoading(true));
   };
@@ -162,6 +157,7 @@ const UseFirebase = () => {
     user,
     error,
     token,
+    getToken,
     signInWithGoogle,
     userRoles,
     setIsUserRoleLoading,
