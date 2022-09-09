@@ -10,7 +10,7 @@ const UpdateBook = () => {
   const [error, setError] = useState("");
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://books-library-server.vercel.app/book?id=${id}`, {
+    fetch(`http://localhost:5000/book?id=${id}`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
@@ -25,7 +25,7 @@ const UpdateBook = () => {
       title: e.target.title.value,
       description: e.target.description.value,
     };
-    fetch(`https://books-library-server.vercel.app/book/${id}`, {
+    fetch(`http://localhost:5000/book/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
