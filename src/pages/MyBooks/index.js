@@ -13,7 +13,7 @@ const MyBooks = () => {
   useEffect(() => {
     async function fetchData() {
       if (isLoading || bookQuery) {
-        await fetch(`https://books-library-server.vercel.app/${bookQuery}`, {
+        await fetch(`http://localhost:5000/${bookQuery}`, {
           headers: {
             authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
@@ -31,16 +31,13 @@ const MyBooks = () => {
     if (!confirmDelete) {
       return;
     }
-    fetch(
-      `https://books-library-server.vercel.app/books/delete?id=${book._id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "content-type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      }
-    )
+    fetch(`http://localhost:5000/books/delete?id=${book._id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.deletedCount) {

@@ -6,23 +6,27 @@ import { timeSince } from "../../hooks/UseDateToTimeAgo";
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState("");
-  const { user, getToken, userRoles } = UseAuth();
+  const { user, getToken, token, userRoles } = UseAuth();
 
   useEffect(() => {
-    fetch(`https://books-library-server.vercel.app/books`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setBooks(data));
-  }, []);
+    if (token) {
+      fetch(`http://localhost:5000/books`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setBooks(data));
+    } else {
+      getToken();
+    }
+  }, [token, getToken]);
   const updateUserRole = () => {
     const userNewDetails = {
       email: user.email,
       role: ["VIEW_ALL", "CREATOR", "VIEWER"],
     };
-    fetch(`https://books-library-server.vercel.app/update-user`, {
+    fetch(`http://localhost:5000/update-user`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

@@ -50,8 +50,9 @@ const UseFirebase = () => {
   };
 
   // SET TOKEN
-  const getToken = async (email) => {
-    await fetch(`https://books-library-server.vercel.app/user?email=${email}`)
+  const getToken = async (email, location, navigate) => {
+    setIsLoading(true);
+    await fetch(`http://localhost:5000/user?email=${email}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
@@ -59,10 +60,13 @@ const UseFirebase = () => {
           localStorage.setItem("accessToken", accessToken);
           setToken(accessToken);
           setUserRoles(data.result.role);
+          const destination = location?.state?.from || "/";
+          navigate(destination);
         } else {
           setError(data.error);
         }
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   // SIGN IN WITH USER AND EMAIL
@@ -70,8 +74,6 @@ const UseFirebase = () => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const destination = location?.state?.from || "/";
-        navigate(destination);
         setError("");
       })
       .catch((error) => {
@@ -80,7 +82,7 @@ const UseFirebase = () => {
       })
       .finally(() => {
         setIsLoading(false);
-        getToken(email);
+        getToken(email, location, navigate);
       });
   };
 
@@ -128,8 +130,9 @@ const UseFirebase = () => {
 
   // ADD USER TO DATABASE
   const addUserToDB = async (email, name, method) => {
+    setIsLoading(true);
     const user = { name, email, role: ["VIEW_ALL"] };
-    await fetch("https://books-library-server.vercel.app/addUser", {
+    await fetch("http://localhost:5000/addUser", {
       method: method,
       headers: {
         "content-type": "application/json",
@@ -139,7 +142,8 @@ const UseFirebase = () => {
       .then((res) => res.json())
       .then((data) => {
         getToken(email);
-      });
+      })
+      .finally(() => isLoading(false));
   };
 
   return {
