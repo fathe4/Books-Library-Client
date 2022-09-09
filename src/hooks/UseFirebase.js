@@ -51,7 +51,7 @@ const UseFirebase = () => {
 
   // SET TOKEN
   useLayoutEffect(() => {
-    if (isUserRoleLoading || user.email) {
+    if (isUserRoleLoading || localStorage.getItem("accessToken")) {
       fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
