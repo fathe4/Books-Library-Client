@@ -4,7 +4,7 @@ import UseAuth from "../../../hooks/UseAuth";
 
 function PrivateRoute({ children }) {
   const { user, isLoading, logout } = UseAuth();
-  console.log(isLoading);
+
   let location = useLocation();
   if (isLoading) {
     return (
