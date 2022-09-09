@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import UseAuth from "../../../hooks/UseAuth";
 
 const Login = () => {
-  const { signIn, signInWithGoogle, error } = UseAuth();
+  const { signIn, error } = UseAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -14,9 +14,7 @@ const Login = () => {
     const password = e.target.password.value;
     signIn(email, password, location, navigate);
   };
-  const handleGoogleSignIn = () => {
-    signInWithGoogle(location, navigate);
-  };
+
   return (
     <div>
       <Container className="w-25 mx-auto shadow p-4 rounded mt-5">
@@ -43,14 +41,6 @@ const Login = () => {
           </Button>
         </Form>
         <p>{error ? error : ""}</p>
-        <p className="text-center">----------OR-----------</p>
-        <Button
-          className="mt-2 w-100"
-          variant="dark"
-          onClick={() => handleGoogleSignIn()}
-        >
-          Google Login
-        </Button>
       </Container>
     </div>
   );

@@ -5,8 +5,6 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   updateProfile,
-  signInWithPopup,
-  GoogleAuthProvider,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import FirebaseInitialization from "../Firebase/firebase.init";
@@ -20,7 +18,6 @@ const UseFirebase = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth();
-  const googleProvider = new GoogleAuthProvider();
 
   // REGISTER WITH EMAIL AND PASSWORD
   const RegisterUser = (email, password, name, location, navigate) => {
@@ -84,22 +81,6 @@ const UseFirebase = () => {
       .finally(() => setIsLoading(false));
   };
 
-  const signInWithGoogle = (location, navigate) => {
-    setIsLoading(true);
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        const user = result.user;
-        addUserToDB(user.email, user.displayName, "POST");
-        setError("");
-        const destination = location?.state?.from || "/";
-        navigate(destination);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => setIsLoading(false));
-  };
-
   // OBSERVE A USER
   useEffect(() => {
     const unsubscribed = onAuthStateChanged(auth, (user) => {
@@ -152,7 +133,6 @@ const UseFirebase = () => {
     error,
     token,
     getToken,
-    signInWithGoogle,
     userRoles,
   };
 };
