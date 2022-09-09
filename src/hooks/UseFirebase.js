@@ -68,6 +68,21 @@ const UseFirebase = () => {
       })
       .finally(() => setIsLoading(false));
   };
+  useEffect(() => {
+    setIsLoading(true);
+    if (user.email !== "") {
+      fetch(`http://localhost:5000/user?email=${user.email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.result) {
+            setUserRoles(data.result.role);
+          } else {
+            setError(data.error);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [user.email]);
 
   // SIGN IN WITH USER AND EMAIL
   const signIn = (email, password, location, navigate) => {
