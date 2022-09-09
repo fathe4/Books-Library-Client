@@ -69,8 +69,8 @@ const UseFirebase = () => {
       .finally(() => setIsLoading(false));
   };
   useEffect(() => {
-    setIsLoading(true);
     if (user.email) {
+      setIsLoading(true);
       fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
@@ -89,6 +89,8 @@ const UseFirebase = () => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        const newUser = { email };
+        setUser(newUser);
         setError("");
       })
       .catch((error) => {
