@@ -5,6 +5,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import FirebaseInitialization from "../Firebase/firebase.init";
@@ -18,6 +20,7 @@ const UseFirebase = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth();
+  const googleProvider = new GoogleAuthProvider();
 
   // REGISTER WITH EMAIL AND PASSWORD
   const RegisterUser = (email, password, name, location, navigate) => {
@@ -48,20 +51,18 @@ const UseFirebase = () => {
 
   // SET TOKEN
   const getToken = async (email) => {
-    if (user.email !== "") {
-      await fetch(`https://books-library-server.vercel.app/user?email=${email}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.token) {
-            const accessToken = data.token;
-            localStorage.setItem("accessToken", accessToken);
-            setToken(accessToken);
-            setUserRoles(data.result.role);
-          } else {
-            setError(data.error);
-          }
-        });
-    }
+    await fetch(`https://books-library-server.vercel.app/user?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.token) {
+          const accessToken = data.token;
+          localStorage.setItem("accessToken", accessToken);
+          setToken(accessToken);
+          setUserRoles(data.result.role);
+        } else {
+          setError(data.error);
+        }
+      });
   };
 
   // SIGN IN WITH USER AND EMAIL
@@ -70,13 +71,31 @@ const UseFirebase = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const destination = location?.state?.from || "/";
-        getToken(email);
         navigate(destination);
         setError("");
       })
       .catch((error) => {
         const errorMessage = error.message;
         setError(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        getToken(email);
+      });
+  };
+
+  const signInWithGoogle = (location, navigate) => {
+    setIsLoading(true);
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const user = result.user;
+        addUserToDB(user.email, user.displayName, "POST");
+        setError("");
+        const destination = location?.state?.from || "/";
+        navigate(destination);
+      })
+      .catch((error) => {
+        setError(error.message);
       })
       .finally(() => setIsLoading(false));
   };
@@ -133,6 +152,7 @@ const UseFirebase = () => {
     error,
     token,
     getToken,
+    signInWithGoogle,
     userRoles,
   };
 };
