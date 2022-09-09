@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import UseAuth from "../../../hooks/UseAuth";
 
 function PrivateRoute({ children }) {
-  const { user, isLoading, logout } = UseAuth();
+  const { user, isLoading } = UseAuth();
 
   let location = useLocation();
   if (isLoading) {
@@ -17,9 +17,6 @@ function PrivateRoute({ children }) {
   }
   if (user.email === undefined) {
     return <Navigate to="/login" state={{ from: location }} />;
-  }
-  if (user.email && localStorage.getItem("accessToken") === null) {
-    logout();
   }
   return children;
 }
