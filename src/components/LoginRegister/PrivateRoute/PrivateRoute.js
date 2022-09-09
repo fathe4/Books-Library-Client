@@ -15,7 +15,6 @@ function PrivateRoute({ children }) {
       </div>
     );
   }
-  console.log(isLoading);
   if (user.email === undefined) {
     return <Navigate to="/login" state={{ from: location }} />;
   }

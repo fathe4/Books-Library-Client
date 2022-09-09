@@ -6,10 +6,10 @@ import { timeSince } from "../../hooks/UseDateToTimeAgo";
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState("");
-  const { user, getToken, token, userRoles } = UseAuth();
+  const { user, getToken, userRoles } = UseAuth();
 
   useEffect(() => {
-    if (token) {
+    if (localStorage.getItem("accessToken") !== null) {
       fetch(`http://localhost:5000/books`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -20,7 +20,7 @@ const AllBooks = () => {
     } else {
       getToken();
     }
-  }, [token, getToken]);
+  }, [getToken]);
   const updateUserRole = () => {
     const userNewDetails = {
       email: user.email,
