@@ -119,6 +119,7 @@ const UseFirebase = () => {
     signOut(auth)
       .then(() => {
         setUser({});
+        localStorage.clear();
       })
       .catch((error) => {
         setError(error.message);
@@ -128,7 +129,6 @@ const UseFirebase = () => {
   // ADD USER TO DATABASE
   const addUserToDB = async (email, name, method) => {
     const user = { name, email, role: ["VIEW_ALL"] };
-    console.log("https://books-library-server.vercel.app/addUser");
     await fetch("https://books-library-server.vercel.app/addUser", {
       method: method,
       headers: {
@@ -138,7 +138,6 @@ const UseFirebase = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         getToken(email);
       });
   };
