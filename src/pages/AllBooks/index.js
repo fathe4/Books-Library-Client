@@ -10,7 +10,7 @@ const AllBooks = () => {
 
   useEffect(() => {
     if (localStorage.getItem("accessToken") !== null) {
-      fetch(`http://localhost:5000/books`, {
+      fetch(`https://books-library-server.vercel.app/books`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -26,7 +26,7 @@ const AllBooks = () => {
       email: user.email,
       role: ["VIEW_ALL", "CREATOR", "VIEWER"],
     };
-    fetch(`http://localhost:5000/update-user`, {
+    fetch(`https://books-library-server.vercel.app/update-user`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

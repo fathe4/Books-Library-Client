@@ -52,7 +52,7 @@ const UseFirebase = () => {
   // SET TOKEN
   const getToken = async (email, location, navigate) => {
     setIsLoading(true);
-    await fetch(`http://localhost:5000/user?email=${email}`)
+    await fetch(`https://books-library-server.vercel.app/user?email=${email}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
@@ -71,7 +71,7 @@ const UseFirebase = () => {
   useEffect(() => {
     setIsLoading(true);
     if (user.email !== "") {
-      fetch(`http://localhost:5000/user?email=${user.email}`)
+      fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.result) {
@@ -147,7 +147,7 @@ const UseFirebase = () => {
   const addUserToDB = async (email, name, method) => {
     setIsLoading(true);
     const user = { name, email, role: ["VIEW_ALL"] };
-    await fetch("http://localhost:5000/addUser", {
+    await fetch("https://books-library-server.vercel.app/addUser", {
       method: method,
       headers: {
         "content-type": "application/json",

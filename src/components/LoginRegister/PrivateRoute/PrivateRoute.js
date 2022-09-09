@@ -18,7 +18,7 @@ function PrivateRoute({ children }) {
   if (user.email === undefined) {
     return <Navigate to="/login" state={{ from: location }} />;
   }
-  if (localStorage.getItem("accessToken") === null) {
+  if (user.email && localStorage.getItem("accessToken") === null) {
     logout();
   }
   return children;

@@ -13,7 +13,7 @@ const CreateBook = () => {
       name: user.displayName,
       email: user.email,
     };
-    fetch("http://localhost:5000/books", {
+    fetch("https://books-library-server.vercel.app/books", {
       method: "POST",
       headers: {
         "content-type": "application/json",
