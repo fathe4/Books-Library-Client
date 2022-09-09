@@ -8,7 +8,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FirebaseInitialization from "../Firebase/firebase.init";
 
 FirebaseInitialization();
@@ -19,7 +19,6 @@ const UseFirebase = () => {
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [isUserRoleLoading, setIsUserRoleLoading] = useState(false);
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
@@ -52,7 +51,6 @@ const UseFirebase = () => {
 
   // SET TOKEN
   const getToken = async (email) => {
-    console.log("getToken");
     if (user.email !== "") {
       await fetch(`https://books-library-server.vercel.app/user?email=${email}`)
         .then((res) => res.json())
@@ -65,8 +63,7 @@ const UseFirebase = () => {
           } else {
             setError(data.error);
           }
-        })
-        .finally(() => setIsUserRoleLoading(false));
+        });
     }
   };
 
@@ -142,10 +139,8 @@ const UseFirebase = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setIsUserRoleLoading(true);
         getToken(email);
-      })
-      .finally(() => setIsUserRoleLoading(true));
+      });
   };
 
   return {
@@ -160,7 +155,6 @@ const UseFirebase = () => {
     getToken,
     signInWithGoogle,
     userRoles,
-    setIsUserRoleLoading,
   };
 };
 
