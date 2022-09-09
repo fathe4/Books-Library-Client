@@ -69,7 +69,9 @@ const UseFirebase = () => {
   useEffect(() => {
     if (user.email) {
       setIsLoading(true);
-      fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
+      fetch(
+        `https://books-library-server-fathe4.vercel.app/user?email=${user.email}`
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.result) {
@@ -88,7 +90,7 @@ const UseFirebase = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const newUser = { email };
-        setUser(newUser);
+        // setUser(newUser);
         setError("");
       })
       .catch((error) => {
@@ -158,7 +160,9 @@ const UseFirebase = () => {
       .then((data) => {
         getToken(email);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return {
