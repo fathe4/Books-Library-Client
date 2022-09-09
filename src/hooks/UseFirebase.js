@@ -70,7 +70,7 @@ const UseFirebase = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    if (user.email) {
+    if (user.email !== "" || user.email !== undefined) {
       fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
