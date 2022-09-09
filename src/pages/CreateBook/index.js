@@ -13,7 +13,7 @@ const CreateBook = () => {
       name: user.displayName,
       email: user.email,
     };
-    fetch("https://books-library-server.vercel.app/books", {
+    fetch("http://localhost:5000/books", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -24,10 +24,11 @@ const CreateBook = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        data.message && alert("You are not allowed to create books");
         data.insertedId && alert("Book Uploaded");
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error:", error.message);
       });
   };
 

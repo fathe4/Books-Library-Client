@@ -61,7 +61,7 @@ const UseFirebase = () => {
           setToken(accessToken);
           setUserRoles(data.result.role);
           const destination = location?.state?.from || "/";
-          navigate(destination);
+          navigate && navigate(destination);
         } else {
           setError(data.error);
         }
@@ -70,7 +70,7 @@ const UseFirebase = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    if (user.email !== "") {
+    if (user.email) {
       fetch(`https://books-library-server.vercel.app/user?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
@@ -158,7 +158,7 @@ const UseFirebase = () => {
       .then((data) => {
         getToken(email);
       })
-      .finally(() => isLoading(false));
+      .finally(() => setIsLoading(false));
   };
 
   return {

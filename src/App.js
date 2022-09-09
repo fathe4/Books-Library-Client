@@ -10,6 +10,7 @@ import CreateBook from "./pages/CreateBook";
 import Home from "./pages/Home";
 import MyBooks from "./pages/MyBooks";
 import UpdateBook from "./pages/UpdateBook";
+import AdminRoute from "./components/LoginRegister/Login/AdminRoute/AdminRoute";
 
 function App() {
   return (
@@ -31,25 +32,25 @@ function App() {
               <Route
                 path="create-book"
                 element={
-                  <PrivateRoute>
+                  <AdminRoute>
                     <CreateBook />
-                  </PrivateRoute>
+                  </AdminRoute>
                 }
               ></Route>
               <Route
                 path="update-book/:id"
                 element={
-                  <PrivateRoute>
+                  <AdminRoute>
                     <UpdateBook />
-                  </PrivateRoute>
+                  </AdminRoute>
                 }
               ></Route>
               <Route
                 path="my-books"
                 element={
-                  <PrivateRoute>
+                  <AdminRoute>
                     <MyBooks />
-                  </PrivateRoute>
+                  </AdminRoute>
                 }
               ></Route>
               <Route
