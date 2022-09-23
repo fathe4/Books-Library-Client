@@ -11,7 +11,6 @@ import CreateBook from "./pages/CreateBook";
 import Home from "./pages/Home";
 import MyBooks from "./pages/MyBooks";
 import UpdateBook from "./pages/UpdateBook";
-// import AdminRoute from "./components/LoginRegister/AdminRoute/AdminRoute";
 import { useState } from "react";
 import AdminRoute from "./components/LoginRegister/AdminRoute/AdminRoute";
 

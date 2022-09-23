@@ -14,7 +14,6 @@ const UseUserDetails = () => {
     const queryClient = useQueryClient();
     return useMutation(
       ({ email, password, name }) => Api.user.register(email, name, password),
-
       {
         onSuccess: (data) => {
           queryClient.invalidateQueries("USER_INFO");
