@@ -4,15 +4,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import UseAuth from "../../../hooks/UseAuth";
 
 const Login = () => {
-  const { signIn, error } = UseAuth();
+  const { error, useUserSignIn } = UseAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { mutate: userLogin } = useUserSignIn(location, navigate);
 
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    signIn(email, password, location, navigate);
+    userLogin({ email, password });
   };
 
   return (

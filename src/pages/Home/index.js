@@ -53,7 +53,7 @@ const Home = () => {
             <div className="user_details">
               {/* <img src="images/profile.jpg" alt="" /> */}
               <div className="name_job">
-                <div className="name">{user.displayName}</div>
+                <div className="name">{user.username}</div>
                 <div className="email">{user.email}</div>
               </div>
             </div>

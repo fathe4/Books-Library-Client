@@ -4,7 +4,7 @@ import UseAuth from "../../../hooks/UseAuth";
 
 function PrivateRoute({ children }) {
   const { user, isLoading } = UseAuth();
-
+  const accessToken = localStorage.getItem("accessToken");
   let location = useLocation();
   if (isLoading) {
     return (
@@ -15,7 +15,7 @@ function PrivateRoute({ children }) {
       </div>
     );
   }
-  if (user.email === undefined) {
+  if (user === null || accessToken === null) {
     return <Navigate to="/login" state={{ from: location }} />;
   }
   return children;

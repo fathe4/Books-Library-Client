@@ -1,8 +1,10 @@
 import { Button, Form } from "react-bootstrap";
+import { useCreateBook } from "../../hooks/Mutation";
 import UseAuth from "../../hooks/UseAuth";
 
 const CreateBook = () => {
   const { user } = UseAuth();
+  const { mutate: createBook } = useCreateBook();
 
   const handleAddBook = (e) => {
     e.preventDefault();
@@ -10,26 +12,10 @@ const CreateBook = () => {
       title: e.target.title.value,
       description: e.target.description.value,
       uploadDate: Date.now(),
-      name: user.displayName,
+      name: user.username,
       email: user.email,
     };
-    fetch("https://books-library-server.vercel.app/books", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-
-      body: JSON.stringify(bookDetails),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        data.message && alert("You are not allowed to create books");
-        data.insertedId && alert("Book Uploaded");
-      })
-      .catch((error) => {
-        console.error("Error:", error.message);
-      });
+    createBook(bookDetails);
   };
 
   return (

@@ -1,46 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import { useUpdateBook } from "../../hooks/Mutation";
+import { useGetBook } from "../../hooks/query";
 
 const UpdateBook = () => {
-  const [bookDetails, setBookDetails] = useState({
-    title: "",
-    description: "",
-  });
-  const [error, setError] = useState("");
   const { id } = useParams();
-  useEffect(() => {
-    fetch(`https://books-library-server.vercel.app/book?id=${id}`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setBookDetails(data[0]));
-  }, [id]);
+  const { data: bookDetails } = useGetBook(id);
+  const { mutate: updateBook } = useUpdateBook();
+
   const handleUpdateBook = (e) => {
     e.preventDefault();
-
     const updatedBookDetails = {
       title: e.target.title.value,
       description: e.target.description.value,
     };
-    fetch(`https://books-library-server.vercel.app/book/${id}`, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify(updatedBookDetails),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.modifiedCount) {
-          alert("Book Updated");
-          setError("");
-        }
-      })
-      .catch((error) => setError(error));
+    updateBook({ id, updatedBookDetails });
   };
 
   return (
@@ -69,7 +44,6 @@ const UpdateBook = () => {
           Update
         </Button>
       </Form>
-      {error && error}
     </div>
   );
 };

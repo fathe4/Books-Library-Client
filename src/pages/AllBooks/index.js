@@ -1,50 +1,23 @@
-import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import { useUpdateUserRole } from "../../hooks/Mutation";
+import { useGetAllBooks } from "../../hooks/query";
 import UseAuth from "../../hooks/UseAuth";
 import { timeSince } from "../../hooks/UseDateToTimeAgo";
 
 const AllBooks = () => {
-  const [books, setBooks] = useState([]);
-  const [error, setError] = useState("");
-  const { user, getToken, userRoles } = UseAuth();
+  const { user, userRoles } = UseAuth();
+  const { data: books } = useGetAllBooks();
+  const { mutate: updateUserRole, isError: isUserRoleUpdateError } =
+    useUpdateUserRole();
 
-  useEffect(() => {
-    if (localStorage.getItem("accessToken") !== null) {
-      fetch(`https://books-library-server.vercel.app/books`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => setBooks(data));
-    } else {
-      getToken();
-    }
-  }, [getToken]);
-  const updateUserRole = () => {
+  const handleUserRole = () => {
     const userNewDetails = {
       email: user.email,
       role: ["VIEW_ALL", "CREATOR", "VIEWER"],
     };
-    fetch(`https://books-library-server.vercel.app/update-user`, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify(userNewDetails),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.modifiedCount) {
-          alert("Congrats you are promoted to a Creator");
-          getToken(user.email);
-        }
-      })
-      .catch((error) => {
-        setError(error);
-      });
+    updateUserRole(userNewDetails);
   };
+
   return (
     <div>
       <h2 className="text-center">All Books</h2>
@@ -52,7 +25,7 @@ const AllBooks = () => {
         <Button
           className="my-4"
           variant="dark"
-          onClick={() => updateUserRole()}
+          onClick={() => handleUserRole()}
         >
           Apply For Creator role
         </Button>
@@ -71,7 +44,7 @@ const AllBooks = () => {
           {books.map((book) => (
             <tr key={book._id}>
               <td>{book.title}</td>
-              <td>{book.description.slice(0, 30)}</td>
+              <td>{book.description?.slice(0, 30)}</td>
               <td>{book.name}</td>
               <td>{book.email}</td>
               <td>{timeSince(new Date(book.uploadDate))}</td>
@@ -80,7 +53,9 @@ const AllBooks = () => {
         </tbody>
       </Table>
       {!books.length && <div className="text-center"> No Books found</div>}
-      {error && <div className="text-center text-danger">{error}</div>}
+      {isUserRoleUpdateError && (
+        <div className="text-center text-danger">{isUserRoleUpdateError}</div>
+      )}
     </div>
   );
 };
