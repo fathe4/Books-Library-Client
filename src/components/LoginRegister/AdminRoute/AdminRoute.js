@@ -4,10 +4,10 @@ import { Navigate, useLocation } from "react-router-dom";
 import UseAuth from "../../../hooks/UseAuth";
 
 const AdminRoute = ({ children, ...rest }) => {
-  const { isLoading, isUserLoading } = UseAuth();
+  const { isLoading } = UseAuth();
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
-  if (isLoading || isUserLoading) {
+  if (isLoading) {
     return (
       <div className="spinner text-center mt-5">
         <Spinner animation="border" role="status">

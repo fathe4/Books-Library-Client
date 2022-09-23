@@ -54,6 +54,12 @@ const UseUserDetails = () => {
     if (data.result) {
       setIsLoading(true);
       setUserRoles(data.result.role);
+      const user = {
+        username: data.result.username,
+        email: data.result.email,
+        role: data.result.role,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
       setIsLoading(false);
     }
   }, [data]);
