@@ -7,15 +7,14 @@ const UseUserDetails = () => {
   const [user, setUser] = useState({ email: "", name: "" });
   const [userRoles, setUserRoles] = useState(["VIEW_ALL"]);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { data } = GetUserInfo(user.email);
 
   const useUserRegister = (location, navigate) => {
     const queryClient = useQueryClient();
     return useMutation(
-      ({ email, password, name }) => {
-        return Api.user.register(email, name, password);
-      },
+      ({ email, password, name }) => Api.user.register(email, name, password),
+
       {
         onSuccess: (data) => {
           queryClient.invalidateQueries("USER_INFO");
@@ -35,9 +34,7 @@ const UseUserDetails = () => {
   const useUserSignIn = (location, navigate) => {
     const queryClient = useQueryClient();
     return useMutation(
-      ({ email, password }) => {
-        return Api.user.login(email, password);
-      },
+      ({ email, password }) => Api.user.login(email, password),
       {
         onSuccess: (data) => {
           queryClient.invalidateQueries("USER_INFO");
